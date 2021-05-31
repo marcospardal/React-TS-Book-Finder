@@ -8,7 +8,8 @@ import {
     ADD_FAVORITE, 
     SHOW_FAVORITES, 
     REMOVE_FAVORITE, 
-    HANDLE_CATEGORY 
+    HANDLE_CATEGORY, 
+    CLEAR_DATA
 } from './types';
 
 const INITIAL_STATE: BooksState = {
@@ -42,6 +43,8 @@ const reducer: Reducer<BooksState> = (state = INITIAL_STATE, action: BookDispatc
             return {...state, showFavorites: action.data.show};
         case HANDLE_CATEGORY: 
             return {...state, category: action.data.category};
+        case CLEAR_DATA: 
+            return {...state, data: []};
         default:
             return state;
     }

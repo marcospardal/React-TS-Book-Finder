@@ -1,5 +1,5 @@
 import { Dispatch } from 'redux';
-import { Book, BookDispatchTypes, BOOK_FAIL, ADD_FAVORITE, REMOVE_FAVORITE, BOOK_LOADING, BOOK_SUCCESS, SHOW_FAVORITES, HANDLE_CATEGORY } from './types';
+import { Book, BookDispatchTypes, BOOK_FAIL, ADD_FAVORITE, REMOVE_FAVORITE, BOOK_LOADING, BOOK_SUCCESS, SHOW_FAVORITES, HANDLE_CATEGORY, CLEAR_DATA } from './types';
 
 export const getBooks = (search: string, page: number, limit?: number, category?: string) => async (dispatch: Dispatch<BookDispatchTypes>) => {
     try {
@@ -80,4 +80,8 @@ export const handleCategory = (category: string) => (dispatch: Dispatch<BookDisp
     })
 }
 
-
+export const clearData = () => (dispatch: Dispatch<BookDispatchTypes>) => {
+    dispatch({
+        type: CLEAR_DATA,
+    })
+}

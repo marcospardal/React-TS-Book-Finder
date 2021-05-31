@@ -2,6 +2,7 @@
 export const BOOK_LOADING = "BOOK_LOADING";
 export const BOOK_SUCCESS = "BOOK_SUCCESS";
 export const BOOK_FAIL = "BOOK_FAIL";
+export const CLEAR_DATA = "CLEAR_DATA";
 export const ADD_FAVORITE = "ADD_FAVORITE";
 export const REMOVE_FAVORITE = "REMOVE_FAVORITE";
 export const SHOW_FAVORITES = "SHOW_FAVORITES";
@@ -13,6 +14,10 @@ interface BooksLoading {
         search: string,
         page: number
     }
+}
+
+interface ClearData {
+    type: typeof CLEAR_DATA,
 }
 
 interface HandleCategory {
@@ -56,7 +61,7 @@ interface BooksFail {
     type: typeof BOOK_FAIL
 }
 
-export type BookDispatchTypes = BooksFail | BooksLoading | BooksSuccess | AddFavorite | RemoveFavorite | ShowFavorites | HandleCategory;
+export type BookDispatchTypes = BooksFail | BooksLoading | BooksSuccess | AddFavorite | RemoveFavorite | ShowFavorites | HandleCategory | ClearData;
 // data types
 
 export interface Book {
