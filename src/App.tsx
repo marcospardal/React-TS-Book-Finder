@@ -5,7 +5,7 @@ import { BrowserRouter as Router, Route } from 'react-router-dom';
 import store from './store';
 
 //pages
-import { HomePage, ListPage } from './pages';
+import { HomePage, ListPage, BookPage } from './pages';
 
 function App() {
   return (
@@ -16,6 +16,8 @@ function App() {
         </Route>
         <Route path='/books'>
           <ListPage />
+        </Route>
+        <Route path='/book' render={(props) => <BookPage {...props}/>}>
         </Route>
       </Router>
     </Provider>
