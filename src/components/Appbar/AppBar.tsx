@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { makeStyles, IconButton, AppBar, Toolbar, fade, Menu, MenuItem, Box, InputAdornment, TextField } from '@material-ui/core';
 import { Favorite, SearchOutlined, MoreVertOutlined } from '@material-ui/icons';
-import { getBooks, showFavorites } from '../../store/ducks/books/actions';
+import { getBooks, showFavorites, clearData } from '../../store/ducks/books/actions';
 import { RootStore } from '../../store';
 
 const useStyle = makeStyles((theme) => ({
@@ -117,12 +117,18 @@ function NavBar() {
             <AppBar position='static' style={{ backgroundColor: 'rgb(78, 52, 46)' }}>
                 <Toolbar>
                     <div className={classes.sectionDesktop}>
-                        <IconButton edge='start' className={classes.homeButton} onClick={() => history.push('/')}>
+                        <IconButton edge='start' className={classes.homeButton} onClick={() => {
+                            dispatch(clearData());
+                            history.push('/');
+                        }}>
                             <h1 style={{ fontFamily: 'Playfair Display', margin: 0, color: '#FFFFFF' }}>BookFinder</h1>
                         </IconButton>
                     </div>
                     <div className={classes.sectionMobile}>
-                    <h1 style={{ fontFamily: 'Playfair Display' }}>BF</h1>
+                    <h1 style={{ fontFamily: 'Playfair Display' }} onClick={() => {
+                            dispatch(clearData());
+                            history.push('/');
+                        }}>BF</h1>
                     </div>
                     <div className={classes.search}>
                         <TextField
