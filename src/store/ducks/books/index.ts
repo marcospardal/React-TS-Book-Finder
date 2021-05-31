@@ -20,6 +20,7 @@ const INITIAL_STATE: BooksState = {
     page: 0,
     search: '',
     showFavorites: false,
+    category: undefined
 };
 
 const reducer: Reducer<BooksState> = (state = INITIAL_STATE, action: BookDispatchTypes) => {

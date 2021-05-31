@@ -71,7 +71,7 @@ export const showFavorites = (show: boolean) => (dispatch: Dispatch<BookDispatch
     })
 } 
 
-export const handleCategory = (category: string) => (dispatch: Dispatch<BookDispatchTypes>) => {
+export const handleCategory = (category: string | undefined) => (dispatch: Dispatch<BookDispatchTypes>) => {
     dispatch({
         type: HANDLE_CATEGORY,
         data: {

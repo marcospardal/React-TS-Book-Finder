@@ -70,21 +70,16 @@ function ListPage() {
         history.push(`/book/${book.title}`, book);
     }
 
-    const handleCategoryChange = (category: string) => dispatch(handleCategory(category));
+    const handleCategoryChange = (category: string | undefined) => dispatch(handleCategory(category));
 
     const renderList = (list: Book[]) => (
         <div>
             <Grid item sm className={classes.category}>
-                {
-                    state.category !== undefined ? 
-                    <Typography style={{color: '#FFFFFF', textAlign: 'center'}}>
-                        {state.category}
-                    </Typography>
-                    :
-                    <Typography style={{color: '#FFFFFF', textAlign: 'center'}}>
-                        Todos
-                    </Typography>
-                }
+                <Typography style={{color: '#FFFFFF', textAlign: 'center'}} onClick={() => handleCategoryChange(undefined)}>
+                    {
+                        state.category  ?? 'Todos'
+                    }
+                </Typography>
             </Grid>
             <Grid container xs={12} spacing={2} style={{ marginTop: '50px' }}>
                 {

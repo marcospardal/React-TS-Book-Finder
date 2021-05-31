@@ -23,7 +23,7 @@ interface ClearData {
 interface HandleCategory {
     type: typeof HANDLE_CATEGORY,
     data: {
-        category: string
+        category: string | undefined
     }
 }
 
@@ -89,5 +89,5 @@ export interface BooksState {
     page: number,
     search: string,
     showFavorites: boolean,
-    category?: string,
+    category: string | undefined,
 }
