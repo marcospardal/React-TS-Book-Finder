@@ -1,16 +1,17 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { InputBase, makeStyles, IconButton, AppBar, Toolbar, fade, Menu, MenuItem, Box } from '@material-ui/core';
+import { useHistory } from 'react-router-dom';
+import { makeStyles, IconButton, AppBar, Toolbar, fade, Menu, MenuItem, Box, InputAdornment, TextField } from '@material-ui/core';
 import { Favorite, Restore, SearchOutlined, MoreVertOutlined } from '@material-ui/icons';
 import { getBooks } from '../../store/ducks/books/actions';
 
 const useStyle = makeStyles((theme) => ({
     grow: {
         flexGrow: 1,
-        marginBottom: '50px',
     },
     homeButton: {
         marginRight: theme.spacing(2),
+        padding: 0
     },
     title: {
         display: 'none',
@@ -60,23 +61,24 @@ const useStyle = makeStyles((theme) => ({
           display: 'flex',
         },
       },
-      sectionMobile: {
-        display: 'flex',
-        margin: '0px 10px',
-        [theme.breakpoints.up('md')]: {
-          display: 'none',
-        },
-      },
+    sectionMobile: {
+    display: 'flex',
+    margin: '0px 10px',
+    [theme.breakpoints.up('md')]: {
+        display: 'none',
+    },
+    },
 }));
 
 function NavBar() {
     const classes = useStyle();
     const dispatch = useDispatch();
+    const history = useHistory();
     const [search, setSearch] = React.useState<string>('');
     const [mobileMoreVertOutlinedAnchorEl, setMobileMoreVertOutlinedAnchorEl] = React.useState<null | HTMLElement>(null);
     const isMobileMenuOpen = Boolean(mobileMoreVertOutlinedAnchorEl);
 
-    const onSubmit = () => dispatch(getBooks(search));
+    const onSubmit = () => dispatch(getBooks(search, 0));
 
     const handleMobileMenuClose = () => {
         setMobileMoreVertOutlinedAnchorEl(null);
@@ -116,25 +118,26 @@ function NavBar() {
             <AppBar position='static' style={{ backgroundColor: 'rgb(78, 52, 46)' }}>
                 <Toolbar>
                     <div className={classes.sectionDesktop}>
-                        <IconButton edge='start' className={classes.homeButton}>
-                            <h1 style={{ fontFamily: 'Playfair Display' }}>BookFinder</h1>
+                        <IconButton edge='start' className={classes.homeButton} onClick={() => history.push('/')}>
+                            <h1 style={{ fontFamily: 'Playfair Display', margin: 0, color: '#FFFFFF' }}>BookFinder</h1>
                         </IconButton>
                     </div>
                     <div className={classes.sectionMobile}>
                     <h1 style={{ fontFamily: 'Playfair Display' }}>BF</h1>
                     </div>
                     <div className={classes.search}>
-                        <div className={classes.searchIcon}>
-                            <SearchOutlined onClick={onSubmit}/>
-                        </div>
-                        <InputBase
-                            onChange={(e) => setSearch(e.target.value)}
-                            placeholder="Buscar"
-                            classes={{
-                                root: classes.inputRoot,
-                                input: classes.inputInput,
+                        <TextField
+                            InputProps={{
+                                endAdornment: <InputAdornment position="end">
+                                    <IconButton component='span' onClick={onSubmit}>
+                                        <SearchOutlined />
+                                    </IconButton>
+                                </InputAdornment>,
                             }}
-                            inputProps={{ 'aria-label': 'search' }}
+                            placeholder='Buscar' 
+                            variant='outlined' 
+                            value={search ?? ''} 
+                            onChange={(e) => setSearch(e.target.value)}
                         />
                     </div>
                     <div className={classes.grow} />
