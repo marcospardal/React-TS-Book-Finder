@@ -1,7 +1,7 @@
 import { Dispatch } from 'redux';
-import { Book, BookDispatchTypes, BOOK_FAIL, ADD_FAVORITE, REMOVE_FAVORITE, BOOK_LOADING, BOOK_SUCCESS, SHOW_FAVORITES } from './types';
+import { Book, BookDispatchTypes, BOOK_FAIL, ADD_FAVORITE, REMOVE_FAVORITE, BOOK_LOADING, BOOK_SUCCESS, SHOW_FAVORITES, HANDLE_CATEGORY } from './types';
 
-export const getBooks = (search: string, page: number, limit?: number) => async (dispatch: Dispatch<BookDispatchTypes>) => {
+export const getBooks = (search: string, page: number, limit?: number, category?: string) => async (dispatch: Dispatch<BookDispatchTypes>) => {
     try {
         dispatch({
             type: BOOK_LOADING,
@@ -11,9 +11,10 @@ export const getBooks = (search: string, page: number, limit?: number) => async 
             }
         });
 
+        const query = search + (category ? `+subject:${category}` : '');
 
         const res = 
-            await fetch(`https://www.googleapis.com/books/v1/volumes?q=${search}&startIndex=${(page * 40)}&endIndex=${((page * 40) + 40)}&key=AIzaSyDqPfXfflkC2hrCsCRwprwmjJnvl3yXagU&maxResults=${limit ?? 39}`, {
+            await fetch(`https://www.googleapis.com/books/v1/volumes?q=${query}&startIndex=${(page * 40)}&endIndex=${((page * 40) + 40)}&key=AIzaSyDqPfXfflkC2hrCsCRwprwmjJnvl3yXagU&maxResults=${limit ?? 39}&subject=Computers`, {
                 method: 'GET'
             });
         const body = await res.json();
@@ -69,5 +70,14 @@ export const showFavorites = (show: boolean) => (dispatch: Dispatch<BookDispatch
         }
     })
 } 
+
+export const handleCategory = (category: string) => (dispatch: Dispatch<BookDispatchTypes>) => {
+    dispatch({
+        type: HANDLE_CATEGORY,
+        data: {
+            category: category
+        }
+    })
+}
 
 

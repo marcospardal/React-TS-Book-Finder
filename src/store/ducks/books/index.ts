@@ -1,5 +1,15 @@
 import { Reducer } from 'redux';
-import { BookDispatchTypes, BooksState, BOOK_LOADING, BOOK_FAIL, BOOK_SUCCESS, ADD_FAVORITE, SHOW_FAVORITES, REMOVE_FAVORITE } from './types';
+import { 
+    BookDispatchTypes, 
+    BooksState, 
+    BOOK_LOADING, 
+    BOOK_FAIL, 
+    BOOK_SUCCESS, 
+    ADD_FAVORITE, 
+    SHOW_FAVORITES, 
+    REMOVE_FAVORITE, 
+    HANDLE_CATEGORY 
+} from './types';
 
 const INITIAL_STATE: BooksState = {
     data: [],
@@ -8,7 +18,7 @@ const INITIAL_STATE: BooksState = {
     loading: false,
     page: 0,
     search: '',
-    showFavorites: false
+    showFavorites: false,
 };
 
 const reducer: Reducer<BooksState> = (state = INITIAL_STATE, action: BookDispatchTypes) => {
@@ -30,6 +40,8 @@ const reducer: Reducer<BooksState> = (state = INITIAL_STATE, action: BookDispatc
         }
         case SHOW_FAVORITES: 
             return {...state, showFavorites: action.data.show};
+        case HANDLE_CATEGORY: 
+            return {...state, category: action.data.category};
         default:
             return state;
     }

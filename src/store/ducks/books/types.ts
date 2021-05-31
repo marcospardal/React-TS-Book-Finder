@@ -5,12 +5,20 @@ export const BOOK_FAIL = "BOOK_FAIL";
 export const ADD_FAVORITE = "ADD_FAVORITE";
 export const REMOVE_FAVORITE = "REMOVE_FAVORITE";
 export const SHOW_FAVORITES = "SHOW_FAVORITES";
+export const HANDLE_CATEGORY = "HANDLE_CATEGORY";
 
 interface BooksLoading {
     type: typeof BOOK_LOADING,
     data?: {
         search: string,
         page: number
+    }
+}
+
+interface HandleCategory {
+    type: typeof HANDLE_CATEGORY,
+    data: {
+        category: string
     }
 }
 
@@ -48,7 +56,7 @@ interface BooksFail {
     type: typeof BOOK_FAIL
 }
 
-export type BookDispatchTypes = BooksFail | BooksLoading | BooksSuccess | AddFavorite | RemoveFavorite | ShowFavorites ;
+export type BookDispatchTypes = BooksFail | BooksLoading | BooksSuccess | AddFavorite | RemoveFavorite | ShowFavorites | HandleCategory;
 // data types
 
 export interface Book {
@@ -75,5 +83,6 @@ export interface BooksState {
     readonly error: boolean,
     page: number,
     search: string,
-    showFavorites: boolean
+    showFavorites: boolean,
+    category?: string,
 }
