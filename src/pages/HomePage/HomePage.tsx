@@ -3,6 +3,7 @@ import { Box, TextField, InputAdornment, IconButton, makeStyles, Button, Grid } 
 import { SearchOutlined, Favorite } from '@material-ui/icons';
 import { BookCard } from '../../components';
 import { getBooks } from '../../store/ducks/books/actions';
+import { Book } from '../../store/ducks/books/types';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootStore } from '../../store';
 import { useHistory } from 'react-router';
@@ -49,17 +50,22 @@ const useStyles = makeStyles(() => ({
 function HomePage() {
     const classes = useStyles();
     const history = useHistory();
-    const [search, setSearch] = React.useState<string>('reactjs');
-    //const [books, setBooks] = React.useState<Book[]>([]);
+    const [search, setSearch] = React.useState<string>('');
     const books = useSelector((state: RootStore) => state.booksReducer.data);
     const dispatch = useDispatch();
 
-    //const onSubmit = () => dispatch(getBooks(search));
-
     function onSubmit() {
-        dispatch(getBooks(search));
+        dispatch(getBooks(search, 0));
         history.push(`/books/results/${search}`);
     }
+
+    function handleClick(book: Book): void {
+        history.push(`/book/${book.title}`, book);
+    }
+
+    React.useEffect(() => {
+        dispatch(getBooks('reactjs', 0, 10));
+    }, [dispatch])
 
     return(
         <Grid container xs={12} className={classes.root}>
@@ -70,7 +76,8 @@ function HomePage() {
                     </h1>
                 </Box>
                 <p style={{ padding: 0, margin: 0, fontFamily: 'Raleway' }}>
-                    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.   
+                    Esse site utiliza a API Google Books para encontrar exemplares de livros, basta adicionar umas busca por
+                    título, autor, categoria entre outras opções.
                 </p>
                 <h3 style={{ fontFamily: 'Playfair Display' }}>
                     Para começar, você pode fazer uma busca rápida utlizando a barra abaixo:
@@ -102,7 +109,7 @@ function HomePage() {
                 <Grid container spacing={2} xs={12} style={{ width: '100%' }}>
                     {
                         books?.map((book) => (
-                            <BookCard book={book}/>
+                            <BookCard book={book} onClick={() => handleClick(book)}/>
                         ))
                     }
                 </Grid>
