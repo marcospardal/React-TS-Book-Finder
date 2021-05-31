@@ -128,7 +128,12 @@ function NavBar() {
                         <TextField
                             InputProps={{
                                 endAdornment: <InputAdornment position="end">
-                                    <IconButton component='span' onClick={onSubmit}>
+                                    <IconButton component='span' onClick={() => {
+                                        onSubmit();
+                                        if(history.location.pathname !== '/books') {
+                                            history.push('/books')
+                                        }
+                                    }}>
                                         <SearchOutlined />
                                     </IconButton>
                                 </InputAdornment>,
