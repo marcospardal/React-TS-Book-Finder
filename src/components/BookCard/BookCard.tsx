@@ -17,6 +17,7 @@ const useStyles = makeStyles(() => ({
         cursor: 'pointer',
         backgroundSize: 'cover', 
         textOverflow: 'ellipsis',
+        maxWidth: '350px'
     },
     cardHovered: {
         transform: 'scale3d(1.05, 1.05, 1)'
@@ -36,7 +37,8 @@ const useStyles = makeStyles(() => ({
 
 interface BookCardProps {
     book: Book,
-    size?: number
+    size?: number,
+    onClick: () => void,
 }
 
 function BookCard(props: BookCardProps) {
@@ -47,14 +49,10 @@ function BookCard(props: BookCardProps) {
     })
     const { book } = props;
 
-
-    React.useEffect(() => {
-        console.log(book);
-    })
-
     return (
         <Grid item xs>
             <Paper
+                onClick={props.onClick}
                 variant='elevation'
                 classes={{root: cardState.raised ? classes.cardHovered : ''}}
                 className={classes.card}
