@@ -64,7 +64,7 @@ function ListPage() {
     const history = useHistory();
     const dispatch = useDispatch();
     const state = useSelector((state: RootStore) => state.booksReducer);
-    const [value, setValue] = React.useState(0);
+    const [value, setValue] = React.useState(1);
 
     function handleClick(book: Book): void {
         history.push(`/book/${book.title}`, book);
