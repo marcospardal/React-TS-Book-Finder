@@ -1,16 +1,19 @@
 import { Dispatch } from 'redux';
-import { Book, BookDispatchTypes, BOOK_FAIL, BOOK_LOADING, BOOK_SUCCESS } from './types';
+import { Book, BookDispatchTypes, BOOK_FAIL, BOOK_FAVORITE, BOOK_LOADING, BOOK_SUCCESS } from './types';
 
-export const getBooks = (search: string) => async (dispatch: Dispatch<BookDispatchTypes>) => {
+export const getBooks = (search: string, page: number, limit?: number) => async (dispatch: Dispatch<BookDispatchTypes>) => {
     try {
         dispatch({
-            type: BOOK_LOADING
+            type: BOOK_LOADING,
+            data: {
+                search: search,
+                page: page
+            }
         });
 
-        console.log('buscando');
 
         const res = 
-            await fetch(`https://www.googleapis.com/books/v1/volumes?q=${search}&key=AIzaSyDqPfXfflkC2hrCsCRwprwmjJnvl3yXagU&maxResults=40`, {
+            await fetch(`https://www.googleapis.com/books/v1/volumes?q=${search}&startIndex=${(page * 40)}&endIndex=${((page * 40) + 40)}&key=AIzaSyDqPfXfflkC2hrCsCRwprwmjJnvl3yXagU&maxResults=${limit ?? 39}`, {
                 method: 'GET'
             });
         const body = await res.json();
@@ -21,11 +24,11 @@ export const getBooks = (search: string) => async (dispatch: Dispatch<BookDispat
                 authors: book.volumeInfo.authors,
                 description: book.volumeInfo.description,
                 pageCount: book.volumeInfo.pageCount,
-                imageLinks: book.volumeInfo.imageLinks
+                imageLinks: book.volumeInfo.imageLinks,
+                page: book.volumeInfo.previewLink,
+                buyPage: book.saleInfo.buyLink
             };
         });
-
-        console.log(items);
 
         dispatch({
             type: BOOK_SUCCESS,
@@ -40,26 +43,13 @@ export const getBooks = (search: string) => async (dispatch: Dispatch<BookDispat
     }
 }
 
-// export async function searchBooks(dispatch: Dispatch<Action>, search: string): Promise<Book[]> {
-//     const res = await fetch(`https://www.googleapis.com/books/v1/volumes?q=${search}&key=AIzaSyDqPfXfflkC2hrCsCRwprwmjJnvl3yXagU`, {
-//         method: 'GET'
-//     });
-//     const body = await res.json();
-//     const items: Book[] = body.items.map((book: any) => {
-//         return {
-//             title: book.volumeInfo.title,
-//             subtitle: book.volumeInfo.subtitle,
-//             authors: book.volumeInfo.authors,
-//             description: book.volumeInfo.description,
-//             pageCount: book.volumeInfo.pageCount,
-//             imageLinks: book.volumeInfo.imageLinks
-//         };
-//     });
+export const addFavorite = (book: Book) => async (dispatch: Dispatch<BookDispatchTypes>) => {
+    dispatch({
+        type: BOOK_FAVORITE,
+        data: {
+            book: book
+        }
+    })
+}
 
-//     dispatch({ loading: true, error: false, type: 'BOOKS_LOADING' })
-//     return items;
-// }
 
-// export function loadBooks(dispatch: Dispatch<Action>, data: Book[]) {
-//     dispatch({ loading: true, error: false, type: 'BOOKS_LOADING', data: data });
-// }
