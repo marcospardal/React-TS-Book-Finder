@@ -1,13 +1,16 @@
 import React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import { Container, Grid, LinearProgress, makeStyles } from '@material-ui/core';
 
 //components
-import { AppBar, BookCard } from '../../components';
+import { AppBar, BookCard, Footer } from '../../components';
 import { RootStore } from '../../store';
+import { Book } from '../../store/ducks/books/types';
 
 const useStyles = makeStyles((theme) => ({
     root: {
+        display: 'flex',
         flexDirection: 'column',
         height: '100%',
         padding: '0px'
@@ -16,23 +19,38 @@ const useStyles = makeStyles((theme) => ({
 
 function ListPage() {
     const classes = useStyles();
+    const history = useHistory();
     const state = useSelector((state: RootStore) => state.booksReducer);
-    const data = useSelector((state: RootStore) => state.booksReducer.data);
+
+    function handleClick(book: Book): void {
+        history.push(`/book/${book.title}`, book);
+    }
 
     return (
         <Container maxWidth='xl' className={classes.root}>
+            {console.log(state)}
             <AppBar/>
                 {
                     state.loading ?
                     <LinearProgress />
                     :
-                    <Grid container xs={12} spacing={2}>
+                    !state.error ?
+                    <div>
+                        <Grid container xs={12} spacing={2} style={{ marginTop: '50px' }}>
                         {
-                            data?.map((book) => (
-                                <BookCard book={book}/>
+                            state.data?.map((book) => (
+                                <BookCard book={book} onClick={() => handleClick(book)}/>
                             ))
                         }
-                    </Grid>
+                        </Grid>
+                        <Footer />
+                    </div>
+                    :
+                    <div style={{ flex: 1 }}>
+                        <h1>
+                            Ops, algo deu errado :(
+                        </h1>
+                    </div>
                 }
         </Container>
     );
