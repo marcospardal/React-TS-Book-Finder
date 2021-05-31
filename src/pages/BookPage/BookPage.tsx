@@ -2,10 +2,11 @@ import React from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 import { makeStyles, Grid, Box, Typography, Button } from '@material-ui/core';
 
-import { addFavorite } from '../../store/ducks/books/actions';
 import { Book } from '../../store/ducks/books/types';
 import { AppBar } from '../../components';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootStore } from '../../store';
+import { addFavorite, removeFavorite } from '../../store/ducks/books/actions';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -55,8 +56,12 @@ function BookPage(props: RouteComponentProps) {
     const book = props.location.state as Book;
     const dispatch = useDispatch();
     const classes = useStyles();
+    const state = useSelector((state: RootStore) => state.booksReducer);
 
-    const handleFavorite = () => dispatch(addFavorite(book));
+    const addtoFavorites = () => dispatch(addFavorite(book));
+    const removeFromFavorites = () => dispatch(removeFavorite(book));
+
+    const checkFavorite = () => state.favorites.includes(book);
 
     return (
         <div className={classes.root}>
@@ -84,8 +89,16 @@ function BookPage(props: RouteComponentProps) {
                         {book.description ? '\t\t' + book.description : ''}
                     </p>
                     <Box display='flex' flexDirection='column' width='100%' justifyContent='space-between'>
-                        <Button className={classes.btn} style={{ backgroundColor: 'red' }} onClick={handleFavorite}>
-                            Adicionar aos Favoritos
+                        <Button className={classes.btn} style={{ backgroundColor: 'red' }} onClick={() => {
+                            if (checkFavorite()) removeFromFavorites();
+                            else addtoFavorites();
+                        }}>
+                            {
+                                checkFavorite() ?
+                                'Remover dos Favoritos'
+                                :
+                                'Adicionar aos Favoritos'
+                            }
                         </Button>
                         <Button
                             className={classes.btn} 

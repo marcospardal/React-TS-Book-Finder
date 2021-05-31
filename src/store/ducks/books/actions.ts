@@ -1,5 +1,5 @@
 import { Dispatch } from 'redux';
-import { Book, BookDispatchTypes, BOOK_FAIL, BOOK_FAVORITE, BOOK_LOADING, BOOK_SUCCESS } from './types';
+import { Book, BookDispatchTypes, BOOK_FAIL, ADD_FAVORITE, REMOVE_FAVORITE, BOOK_LOADING, BOOK_SUCCESS, SHOW_FAVORITES } from './types';
 
 export const getBooks = (search: string, page: number, limit?: number) => async (dispatch: Dispatch<BookDispatchTypes>) => {
     try {
@@ -43,13 +43,31 @@ export const getBooks = (search: string, page: number, limit?: number) => async 
     }
 }
 
-export const addFavorite = (book: Book) => async (dispatch: Dispatch<BookDispatchTypes>) => {
+export const addFavorite = (book: Book) => (dispatch: Dispatch<BookDispatchTypes>) => {
     dispatch({
-        type: BOOK_FAVORITE,
+        type: ADD_FAVORITE,
         data: {
             book: book
         }
     })
 }
+
+export const removeFavorite = (book: Book) => (dispatch: Dispatch<BookDispatchTypes>) => {
+    dispatch({
+        type: REMOVE_FAVORITE,
+        data: {
+            book: book
+        }
+    })
+}
+
+export const showFavorites = (show: boolean) => (dispatch: Dispatch<BookDispatchTypes>) => {
+    dispatch({
+        type: SHOW_FAVORITES,
+        data: {
+            show: show
+        }
+    })
+} 
 
 

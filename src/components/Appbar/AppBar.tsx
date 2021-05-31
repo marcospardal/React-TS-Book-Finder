@@ -1,9 +1,10 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { makeStyles, IconButton, AppBar, Toolbar, fade, Menu, MenuItem, Box, InputAdornment, TextField } from '@material-ui/core';
-import { Favorite, Restore, SearchOutlined, MoreVertOutlined } from '@material-ui/icons';
-import { getBooks } from '../../store/ducks/books/actions';
+import { Favorite, SearchOutlined, MoreVertOutlined } from '@material-ui/icons';
+import { getBooks, showFavorites } from '../../store/ducks/books/actions';
+import { RootStore } from '../../store';
 
 const useStyle = makeStyles((theme) => ({
     grow: {
@@ -74,11 +75,14 @@ function NavBar() {
     const classes = useStyle();
     const dispatch = useDispatch();
     const history = useHistory();
+    const state = useSelector((state: RootStore) => state.booksReducer);
     const [search, setSearch] = React.useState<string>('');
     const [mobileMoreVertOutlinedAnchorEl, setMobileMoreVertOutlinedAnchorEl] = React.useState<null | HTMLElement>(null);
     const isMobileMenuOpen = Boolean(mobileMoreVertOutlinedAnchorEl);
 
     const onSubmit = () => dispatch(getBooks(search, 0));
+
+    const handleFavorites = (show: boolean) => dispatch(showFavorites(show)); 
 
     const handleMobileMenuClose = () => {
         setMobileMoreVertOutlinedAnchorEl(null);
@@ -101,13 +105,8 @@ function NavBar() {
           onClose={handleMobileMenuClose}
         >
           <MenuItem>
-            <IconButton component="span" style={{ color: '#FF0000' }}>
+            <IconButton component="span" style={{ color: state.showFavorites ? 'red' : 'grey' }} onClick={() => handleFavorites(!state.showFavorites)}>
                 <Favorite />
-            </IconButton>
-          </MenuItem>
-          <MenuItem>
-            <IconButton component="span" style={{ color: 'black' }}>
-                <Restore />
             </IconButton>
           </MenuItem>
         </Menu>
@@ -144,12 +143,9 @@ function NavBar() {
                     <div className={classes.sectionDesktop}>
                     <Box alignItems='center' alignContent='center' justifyContent='center' display='flex'>
                         <Box display='flex' flexDirection='column' alignItems='center'>
-                            <IconButton component="span" style={{ color: '#FF0000' }}>
+                            <IconButton component="span" style={{ color: state.showFavorites ? 'red' : 'white' }} onClick={() => handleFavorites(!state.showFavorites)}>
                                 <Favorite style={{ height: '40px', width: '40px' }}/>
                             </IconButton>
-                        </Box>
-                        <Box display='flex' flexDirection='column' alignItems='center' padding='5px'>
-                            <Restore style={{ height: '40px', width: '40px' }}/>
                         </Box>
                     </Box>
                     </div>
@@ -172,36 +168,3 @@ function NavBar() {
 };
 
 export default NavBar;
-
-/**
- * <Box flexDirection='row' justifyContent='space-between' display='flex' padding='10px' alignItems='center'>
-                <Box alignItems='center' alignContent='center' justifyContent='center' display='flex'>
-                    <BookOutlined />
-                    <p style={{ fontSize: 22 }}>Buscador de Livros</p>
-                </Box>
-                <TextField
-                    InputProps={{
-                        endAdornment: <InputAdornment position="end">
-                            <IconButton component='span' onClick={handleSearch}>
-                                <SearchOutlined />
-                            </IconButton>
-                        </InputAdornment>,
-                    }}
-                    placeholder='Buscar' 
-                    variant='outlined' 
-                    className={classes.searchBar} 
-                    value={search ?? ''} 
-                    onChange={(e) => setSearch(e.target.value)}/>
-                <Box alignItems='center' alignContent='center' justifyContent='center' display='flex'>
-                    <Box display='flex' flexDirection='column' alignItems='center'>
-                        <IconButton component="span" style={{ color: '#FF0000' }}>
-                            <Favorite />
-                        </IconButton>
-                    </Box>
-                    <Box display='flex' flexDirection='column' alignItems='center' padding='5px'>
-                        <Restore />
-                    </Box>
-                </Box>
-                
-            </Box>
- */

@@ -26,6 +26,24 @@ function ListPage() {
         history.push(`/book/${book.title}`, book);
     }
 
+    const renderList = (list: Book[]) => (
+        <Grid container xs={12} spacing={2} style={{ marginTop: '50px' }}>
+            {
+                list.map((book) => (
+                    <BookCard book={book} onClick={() => handleClick(book)}/>
+                ))
+            }
+        </Grid>  
+    );
+
+    const renderError = () => (
+        <div style={{ flex: 1 }}>
+            <h1>
+                Ops, algo deu errado :(
+            </h1>
+        </div>
+    )
+
     return (
         <Container maxWidth='xl' className={classes.root}>
             {console.log(state)}
@@ -35,22 +53,26 @@ function ListPage() {
                     <LinearProgress />
                     :
                     !state.error ?
-                    <div>
-                        <Grid container xs={12} spacing={2} style={{ marginTop: '50px' }}>
-                        {
-                            state.data?.map((book) => (
-                                <BookCard book={book} onClick={() => handleClick(book)}/>
-                            ))
-                        }
-                        </Grid>
-                        <Footer />
-                    </div>
+                        state.showFavorites ? 
+                            state.favorites.length ?
+                                renderList(state.favorites)
+                            :
+                            <div style={{ flex: 1 }}>
+                                <h1 style={{ fontFamily: 'Playfair Display', fontSize: 25 }}>
+                                    Você ainda não favoritou nenhum livro. Para favoritar basta fazer uma busca
+                                    , selecionar o livro escolhido e clicar em adicionar aos favoritos. 
+                                </h1>
+                            </div>
+                        :
+                        state.data.length ? 
+                            <div>
+                                {renderList(state.data)}
+                                <Footer />
+                            </div>
+                        :
+                            renderError()
                     :
-                    <div style={{ flex: 1 }}>
-                        <h1>
-                            Ops, algo deu errado :(
-                        </h1>
-                    </div>
+                    renderError()
                 }
         </Container>
     );
